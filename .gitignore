@@ -1,0 +1,12 @@
+# Simulation outputs
+sim/*.vcd
+sim/*_sim
+
+# Temporary files
+*.log
+*.tmp
+*~
+
+# GTKWave save files
+*.gtkw 
+
