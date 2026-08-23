@@ -204,3 +204,70 @@ RTL development and verification could continue independently without waiting fo
 This separated the project into front-end and back-end stages and prevented the tool installation process from blocking RTL development.
 
 
+---
+
+## 6. Integration Testbench Sampling Timing Error
+
+### Issue
+
+During the first complete TinyNoC integration simulation, all three basic routing tests failed:
+
+```text
+FAIL: Input 0 -> Output 2
+FAIL: Input 1 -> Output 1
+FAIL: Input 3 -> Output 0
+TINYNOC INTEGRATION FAILED: 3 errors
+```
+
+However, the individual RTL blocks had already passed linting and standalone verification.
+
+### Cause
+
+The failure was caused by the testbench sampling the router output too late.
+
+After sending a packet, the testbench originally waited for two additional negative clock edges:
+
+```systemverilog
+repeat (2) @(negedge clk);
+```
+
+The router had already forwarded the packet and removed it from the input FIFO before the testbench checked `out_valid` and `out_packet`.
+
+Therefore, the testbench reported a false failure even though the datapath was operating correctly.
+
+### Solution
+
+The unnecessary delay was removed and the output was checked shortly after the packet-send task completed:
+
+```systemverilog
+#1;
+```
+
+This allowed the combinational routing and arbitration logic to settle while the output packet was still valid.
+
+### Result
+
+After correcting the testbench sampling time, the integration simulation reported:
+
+```text
+PASS: Input 0 routed to Output 2
+PASS: Input 1 routed to Output 1
+PASS: Input 3 routed to Output 0
+
+BASIC TINYNOC INTEGRATION PASSED
+```
+
+### Learning
+
+This issue demonstrated that:
+
+```text
+Lint Clean
+    !=
+Module Verification
+    !=
+Integration Verification
+```
+
+Correct testbench timing is essential when validating cycle-level RTL behavior.
+
