@@ -78,7 +78,7 @@ module tinynoc_top #(
 
     input_fifo #(
         .DATA_WIDTH(DATA_WIDTH),
-        .DEPTH     (4)
+        .DEPTH     (2)
     ) fifo0 (
         .clk      (clk),
         .rst_n    (rst_n),
@@ -96,7 +96,7 @@ module tinynoc_top #(
 
     input_fifo #(
         .DATA_WIDTH(DATA_WIDTH),
-        .DEPTH     (4)
+        .DEPTH     (2)
     ) fifo1 (
         .clk      (clk),
         .rst_n    (rst_n),
@@ -114,7 +114,7 @@ module tinynoc_top #(
 
     input_fifo #(
         .DATA_WIDTH(DATA_WIDTH),
-        .DEPTH     (4)
+        .DEPTH     (2)
     ) fifo2 (
         .clk      (clk),
         .rst_n    (rst_n),
@@ -132,7 +132,7 @@ module tinynoc_top #(
 
     input_fifo #(
         .DATA_WIDTH(DATA_WIDTH),
-        .DEPTH     (4)
+        .DEPTH     (2)
     ) fifo3 (
         .clk      (clk),
         .rst_n    (rst_n),
