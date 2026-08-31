@@ -10,3 +10,16 @@ sim/*_sim
 # GTKWave save files
 *.gtkw 
 
+# Generated simulation executables
+sim/tinynoc_top_tb
+sim/tinynoc_wrapper_check
+
+# Full LibreLane run directories
+physical_design/runs/
+
+# Intermediate synthesis outputs
+synthesis/tinynoc_flat_synth.v
+synthesis/tinynoc_ihp130_mapped.v
+synthesis/tinynoc_ihp130_synth.v
+synthesis/tinynoc_synth.v
+
