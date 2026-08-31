@@ -271,3 +271,115 @@ Integration Verification
 
 Correct testbench timing is essential when validating cycle-level RTL behavior.
 
+## IHP SG13G2 Synthesis and Physical Design
+
+### 1. Cell Count Exceeded the Target
+
+**Problem:**  
+The initial IHP SG13G2 synthesis of the TinyNoC core produced 1117 mapped standard cells, exceeding the target of 1000 cells.
+
+**Solution:**  
+The FIFO depth of all four input FIFOs was reduced from 4 to 2. RTL integration verification was repeated after the optimization and passed successfully.
+
+The optimized TinyNoC core required 769 mapped standard cells. After adding the external tapeout wrapper, the final synthesis resulted in 939 mapped SG13G2 standard cells.
+
+---
+
+### 2. Static Timing Analysis
+
+**Problem:**  
+OpenSTA was initially unavailable on Ubuntu and had to be built with its required dependencies.
+
+**Solution:**  
+OpenSTA 3.1.0 was successfully built and used with the IHP SG13G2 typical timing library.
+
+A preliminary clock period of 20 ns (50 MHz) was used for timing analysis.
+
+Results:
+
+- Setup worst slack: +15.24 ns
+- Hold worst slack: +0.26 ns
+- Setup timing: MET
+- Hold timing: MET
+
+These results correspond to preliminary pre-layout STA.
+
+---
+
+### 3. OpenROAD Build Issue
+
+**Problem:**  
+Building OpenROAD locally required several dependencies and significant compilation time. The source build could not be completed efficiently on the available system.
+
+**Solution:**  
+Instead of continuing the local OpenROAD compilation, LibreLane was installed in a Python virtual environment and Docker was used to provide the required physical-design tools.
+
+---
+
+### 4. Docker Permission Error
+
+**Problem:**  
+LibreLane initially reported:
+
+`permission denied while trying to connect to the docker API`
+
+**Solution:**  
+The user was added to the Docker group:
+
+`sudo usermod -aG docker $USER`
+
+The new group was activated using:
+
+`newgrp docker`
+
+Docker operation was then verified successfully.
+
+---
+
+### 5. IHP SG13G2 PDK Not Detected
+
+**Problem:**  
+LibreLane initially attempted to use/download its default PDK environment and reported that `ihp-sg13g2` could not be found.
+
+**Solution:**  
+The existing local IHP Open PDK was used through LibreLane's manual PDK mode.
+
+The selected technology configuration was:
+
+- PDK: `ihp-sg13g2`
+- Standard-cell library: `sg13g2_stdcell`
+
+This allowed LibreLane to use the local IHP SG13G2 technology files directly.
+
+---
+
+## Final Physical Design Results
+
+The complete LibreLane physical-design flow successfully reached GDSII.
+
+Final results:
+
+- Standard-cell synthesis result: 939 cells
+- Design instance area: 39,060.4 µm²
+- Die area: 48,198.1 µm²
+- Standard-cell utilization: 55.4162%
+- Final routed wire length: 39,942 µm
+- Antenna violations: 0
+- Magic DRC errors: 0
+- KLayout DRC errors: 0
+- LVS device differences: 0
+- LVS net differences: 0
+- LVS unmatched pins: 0
+- Setup TNS: 0
+- Hold TNS: 0
+
+The flow successfully completed:
+
+`RTL → Verification → Synthesis → STA → Floorplanning → Placement → CTS → Routing → DRC → LVS → GDSII`
+
+Final generated deliverables include GDSII, DEF, LEF, post-layout netlist, SDF, SDC, SPICE netlist, layout render, and implementation metrics.
+
+### Timing Note
+
+LibreLane reported that dedicated `PNR_SDC_FILE` and `SIGNOFF_SDC_FILE` files were not explicitly provided, so generic fallback SDC constraints were used for some PnR/sign-off stages. Therefore, the physical implementation completed successfully, but final tapeout timing constraints should be confirmed against the required shuttle specification.
+
