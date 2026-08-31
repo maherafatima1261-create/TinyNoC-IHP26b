@@ -208,6 +208,43 @@ module tinynoc_top_tb;
             errors++;
 
         end
+           // TEST 4: Contention + QoS
+        // Input 0 and Input 1 both request Output 2.
+        // Input 1 has high QoS priority.
+
+        @(negedge clk);
+
+        in_packet0 = 12'b10_0_00001111_0;
+        in_packet1 = 12'b10_1_11110000_0;
+
+        in_valid0 = 1'b1;
+        in_valid1 = 1'b1;
+
+        @(negedge clk);
+
+        in_valid0 = 1'b0;
+        in_valid1 = 1'b0;
+
+        #1;
+
+        if (out_valid2 &&
+            out_packet2 == 12'b10_1_11110000_0) begin
+            $display("PASS: High-priority packet won contention");
+        end else begin
+            $display("FAIL: QoS contention first grant");
+            errors++;
+        end
+
+        @(negedge clk);
+        #1;
+
+        if (out_valid2 &&
+            out_packet2 == 12'b10_0_00001111_0) begin
+            $display("PASS: Normal-priority packet forwarded next");
+        end else begin
+            $display("FAIL: QoS contention second grant");
+            errors++;
+        end
 
         if (errors == 0) begin
             $display("================================");
