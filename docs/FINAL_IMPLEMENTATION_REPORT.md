@@ -114,20 +114,6 @@ Therefore, the final synthesized wrapper remained below the project's 1000-stand
 
 ## 5. Static Timing Analysis and Physical Design
 
-### 5.1 Preliminary Static Timing Analysis
-
-Pre-layout static timing analysis was performed using OpenSTA 3.1.0 with the IHP SG13G2 typical timing library.
-
-A preliminary clock period of 20 ns, corresponding to 50 MHz, was used for analysis.
-
-The preliminary STA results were:
-
-- Setup worst slack: +15.24 ns
-- Hold worst slack: +0.26 ns
-- Setup timing status: MET
-- Hold timing status: MET
-
-These values represent preliminary pre-layout timing analysis and should not be interpreted as the final maximum operating frequency of the design.
 
 ### 5.2 Physical Design Flow
 
