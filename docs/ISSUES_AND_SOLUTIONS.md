@@ -281,7 +281,7 @@ The initial IHP SG13G2 synthesis of the TinyNoC core produced 1117 mapped standa
 **Solution:**  
 The FIFO depth of all four input FIFOs was reduced from 4 to 2. RTL integration verification was repeated after the optimization and passed successfully.
 
-The optimized TinyNoC core required 769 mapped standard cells. After adding the external tapeout wrapper, the final synthesis resulted in 939 mapped SG13G2 standard cells.
+The optimized TinyNoC core required 769 mapped standard cells. After adding the external tapeout wrapper, the final synthesis resulted in 928 mapped SG13G2 standard cells.
 
 ---
 
@@ -359,7 +359,7 @@ The complete LibreLane physical-design flow successfully reached GDSII.
 
 Final results:
 
-- Standard-cell synthesis result: 939 cells
+- Standard-cell synthesis result: 928 cells
 - Design instance area: 39,060.4 µm²
 - Die area: 48,198.1 µm²
 - Standard-cell utilization: 55.4162%
